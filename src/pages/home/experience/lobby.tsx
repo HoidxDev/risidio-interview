@@ -292,8 +292,6 @@ type GLTFResult = GLTF & {
         theShining_interaction_v1: THREE.Mesh
         Cube065_1: THREE.Mesh
         Cube065_2: THREE.Mesh
-        Cube065_1: THREE.Mesh
-        Cube065_2: THREE.Mesh
         Us_movei_poster: THREE.Mesh
         blade_runner: THREE.Mesh
         Cube129: THREE.Mesh
@@ -492,8 +490,6 @@ type GLTFResult = GLTF & {
         casset002_1: THREE.Mesh
         casset002_2: THREE.Mesh
         Chair_desk003: THREE.Mesh
-        Chairs_model_002_1: THREE.Mesh
-        Chairs_model_002_2: THREE.Mesh
         Chairs_model_002_1: THREE.Mesh
         Chairs_model_002_2: THREE.Mesh
         ['Computer&Mouse_interaction_v2004']: THREE.Mesh
