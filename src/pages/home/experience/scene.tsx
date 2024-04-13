@@ -5,7 +5,7 @@ import { OrbitControls } from '@react-three/drei'
 export default function Scene() {
     return (
         <Canvas style={{ height: '100vh', width: '100vw' }}>
-            <ambientLight />
+            <ambientLight intensity={2} />
             <Lobby />
             <OrbitControls />
         </Canvas>
