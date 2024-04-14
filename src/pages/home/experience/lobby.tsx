@@ -1,8 +1,8 @@
 import * as THREE from 'three'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
-import { postersBottom } from './utils/posters-constant'
+import { postersBottom, postersTop } from '../../../utils/data/posters-constant'
 import { Poster } from './poster'
 
 type GLTFResult = GLTF & {
@@ -842,11 +842,19 @@ export function Lobby(props: JSX.IntrinsicElements['group']) {
     const group = useRef<THREE.Group>(null)
     const { nodes, materials, animations } = useGLTF('/models/lobby.glb') as GLTFResult
     const { actions } = useAnimations(animations, group)
+    const [scriptBoardHovered, setScriptBoardHovered] = useState(false)
 
     useEffect(() => {
         console.log(actions)
     })
-    console.log(materials['backToFuture_interaction_v1'])
+
+    const scriptBoardPointerEnter = () => {
+        setScriptBoardHovered(true)
+    };
+
+    const scriptBoardPointerLeave = () => {
+        setScriptBoardHovered(false)
+    };
 
     return (
         <group position={[-29, -5, -15]} ref={group} {...props} dispose={null}>
@@ -3121,13 +3129,6 @@ export function Lobby(props: JSX.IntrinsicElements['group']) {
                         material={materials.white_soft}
                     />
                     <mesh
-                        name="all_static_objects_4"
-                        castShadow
-                        receiveShadow
-                        geometry={nodes.all_static_objects_4.geometry}
-                        material={materials.beige_wood_frame}
-                    />
-                    <mesh
                         name="all_static_objects_5"
                         castShadow
                         receiveShadow
@@ -3241,15 +3242,6 @@ export function Lobby(props: JSX.IntrinsicElements['group']) {
                     position={[28.969, 3.863, 18.95]}
                     scale={0.29}
                 />
-                <mesh
-                    name="lobby_all_static_objects058"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.lobby_all_static_objects058.geometry}
-                    material={materials.beige_wood_frame}
-                    position={[28.969, 3.863, 18.929]}
-                    scale={0.29}
-                />
                 <group name="Cube125" position={[30.704, 3.801, 27.313]}>
                     <mesh
                         name="Cube065_1"
@@ -3346,6 +3338,8 @@ export function Lobby(props: JSX.IntrinsicElements['group']) {
                     rotation={[0, 1.571, 0]}
                     scale={0.961}
                 />
+
+                {/* sadas */}
                 <mesh
                     name="Plane013"
                     castShadow
@@ -6829,6 +6823,8 @@ export function Lobby(props: JSX.IntrinsicElements['group']) {
                     rotation={[Math.PI / 2, 0, 0]}
                     scale={1.363} />
                 <mesh
+                    onPointerEnter={scriptBoardPointerEnter}
+                    onPointerLeave={scriptBoardPointerLeave}
                     name="scriptBoard_interaction_v1"
                     castShadow
                     receiveShadow
@@ -6836,202 +6832,26 @@ export function Lobby(props: JSX.IntrinsicElements['group']) {
                     material={materials.scriptBoard_interaction_v1}
                     position={[29.185, 5.613, 15.362]}
                     rotation={[Math.PI / 2, 0, 0]}
-                    scale={0.29} />
+                    scale={0.29} >
+                    {scriptBoardHovered && <meshBasicMaterial map={materials.scriptBoard_interaction_v1.map} color={[3, 1, 3]} side={THREE.DoubleSide} toneMapped={false} />}
+
+                    <mesh scale={[8.5, 5, 2]} position={[0.01, 0.05, 0]} rotation-x={Math.PI * 0.5} >
+                        <ringGeometry args={[0.9, 1.01, 4, 4, 2.36]} />
+                        <meshBasicMaterial side={THREE.DoubleSide} color={'#B59B84'} toneMapped={false} />
+                    </mesh>
+                    {scriptBoardHovered &&
+                        <mesh scale={[8.1, 4.75, 2]} position={[0.01, 0.1, 0]} rotation-x={Math.PI * 0.5} >
+                            <ringGeometry args={[0.98, 1.03, 4, 5, 2.36]} />
+                            <meshStandardMaterial emissiveIntensity={scriptBoardHovered ? 3 : 0} side={THREE.DoubleSide} color={[1, 1, 3]} emissive={[1, 1, 3]} toneMapped={false} />
+                        </mesh>
+                    }
+                </mesh>
             </group>
-
-            <group>
-                {/* <mesh
-                    name="backToFuture_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.backToFuture_interaction_v1.geometry}
-                    material={materials['backToFuture_interaction_v1']}
-                    position={[24.654, 5.737, 15.246]}
-                    rotation={[Math.PI / 2, 0, 0]}
-                    scale={0.29} />
-                <mesh
-                    name="the_big_lebowski"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.the_big_lebowski.geometry}
-                    material={materials['the big lebowski']}
-                    position={[26.269, 5.732, 15.224]}
-                    rotation={[Math.PI / 2, 0, 0]}
-                />
-                <mesh
-                    name="Us_movei_poster"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.Us_movei_poster.geometry}
-                    material={materials['Us movei poster']}
-                    position={[32.194, 5.733, 15.227]}
-                    rotation={[Math.PI / 2, 0, 0]} />
-                <mesh
-                    name="blade_runner"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.blade_runner.geometry}
-                    material={materials['blade runner']}
-                    position={[33.995, 5.713, 15.224]}
-                    rotation={[Math.PI / 2, 0, 0]} />
-                <mesh
-                    name="planet_of_the_apes"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.planet_of_the_apes.geometry}
-                    material={materials['planet of the apes']}
-                    position={[35.786, 5.743, 15.234]}
-                    rotation={[Math.PI / 2, 0, 0]} />
-                <mesh
-                    name="theGodfather_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.theGodfather_interaction_v1.geometry}
-                    material={materials['theGodfather_interaction_v1']}
-                    position={[37.686, 5.872, 17.394]}
-                    rotation={[1.572, 0, 1.573]}
-                    scale={0.29} />
-                <mesh
-                    name="theShining_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.theShining_interaction_v1.geometry}
-                    material={materials['theShining_interaction_v1']}
-                    position={[37.686, 5.872, 19.434]}
-                    rotation={[1.572, 0, 1.573]}
-                    scale={0.29} /> */}
-
-
-
-                {/* --- Top */}
-                <mesh
-                    name="badBoys_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.badBoys_interaction_v1.geometry}
-                    material={materials['badBoys_interaction_v1']}
-                    position={[25.379, 9.3, 16.153]}
-                    rotation={[Math.PI / 2, 0, 0]}
-                    scale={0.29} />
-                <mesh
-                    name="21jumpStreet_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes['21jumpStreet_interaction_v1'].geometry}
-                    material={materials['21jumpStreet_interaction_v1']}
-                    position={[27.177, 9.3, 16.153]}
-                    rotation={[Math.PI / 2, 0, 0]}
-                    scale={0.29} />
-                <mesh
-                    name="bohemianRhapsody_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.bohemianRhapsody_interaction_v1.geometry}
-                    material={materials['bohemianRhapsody_interaction_v1']}
-                    position={[28.991, 9.3, 16.153]}
-                    rotation={[Math.PI / 2, 0, 0]}
-                    scale={0.29} />
-                <mesh
-                    name="fordVFerrari_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.fordVFerrari_interaction_v1.geometry}
-                    material={materials['fordVFerrari_interaction_v1']}
-                    position={[30.795, 9.3, 16.153]}
-                    rotation={[Math.PI / 2, 0, 0]}
-                    scale={0.29} />
-                <mesh
-                    name="gunShy_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.gunShy_interaction_v1.geometry}
-                    material={materials['gunShy_interaction_v1']}
-                    position={[32.58, 9.3, 16.153]}
-                    rotation={[Math.PI / 2, 0, 0]}
-                    scale={0.29} />
-                <mesh
-                    name="interstellar_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.interstellar_interaction_v1.geometry}
-                    material={materials['interstellar_interaction_v1']}
-                    position={[34.395, 9.3, 16.153]}
-                    rotation={[Math.PI / 2, 0, 0]}
-                    scale={0.29} />
-                <mesh
-                    name="fear_&_loathing"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes['fear_&_loathing'].geometry}
-                    material={materials['fear & loathing']}
-                    position={[36.172, 9.297, 16.155]}
-                    rotation={[Math.PI / 2, 0, 0]} />
-                <mesh
-                    name="kolya_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.kolya_interaction_v1.geometry}
-                    material={materials['kolya_interaction_v1']}
-                    position={[37.225, 9.3, 17.338]}
-                    rotation={[1.572, 0, 1.573]}
-                    scale={0.29} />
-                <mesh
-                    name="lebanon_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.lebanon_interaction_v1.geometry}
-                    material={materials['lebanon_interaction_v1']}
-                    position={[37.225, 9.3, 19.062]}
-                    rotation={[1.572, 0, 1.573]}
-                    scale={0.29} />
-                <mesh
-                    name="likeWater4Chocolate_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.likeWater4Chocolate_interaction_v1.geometry}
-                    material={materials['likeWater4Chocolate_interaction_v1']}
-                    position={[37.225, 9.3, 20.788]}
-                    rotation={[1.572, 0, 1.573]}
-                    scale={0.29} />
-                <mesh
-                    name="madMaxFuryRoad_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.madMaxFuryRoad_interaction_v1.geometry}
-                    material={materials['madMaxFuryRoad_interaction_v1']}
-                    position={[37.225, 9.3, 22.506]}
-                    rotation={[1.572, 0, 1.573]}
-                    scale={0.29} />
-                <mesh
-                    name="manOnFire_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.manOnFire_interaction_v1.geometry}
-                    material={materials['manOnFire_interaction_v1']}
-                    position={[37.225, 9.307, 24.231]}
-                    rotation={[1.572, 0, 1.573]}
-                    scale={0.29} />
-                <mesh
-                    name="mr&MrsSmith_interaction_v1"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes['mr&MrsSmith_interaction_v1'].geometry}
-                    material={materials['mr&MrsSmith_interaction_v1']}
-                    position={[37.225, 9.3, 25.97]}
-                    rotation={[1.572, 0, 1.573]}
-                    scale={0.29} />
-                <mesh
-                    name="empire_strikes_back"
-                    castShadow
-                    receiveShadow
-                    geometry={nodes.empire_strikes_back.geometry}
-                    material={materials['empire strikes back']}
-                    position={[37.242, 9.345, 27.696]}
-                    rotation={[Math.PI / 2, 0, Math.PI / 2]} />
-
-            </group>
-
             {postersBottom.map((poster) => (
+                <Poster data={poster} />
+            ))}
+
+            {postersTop.map((poster) => (
                 <Poster data={poster} />
             ))}
         </group>
