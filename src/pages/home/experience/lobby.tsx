@@ -1,9 +1,10 @@
 import * as THREE from 'three'
-import { useEffect, useRef, useState } from 'react'
-import { useGLTF, useAnimations } from '@react-three/drei'
+import { useRef, useState } from 'react'
+import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 import { postersBottom, postersTop } from '../../../utils/data/posters-constant'
 import { Poster } from './poster'
+import store from '../../../store'
 
 type GLTFResult = GLTF & {
     nodes: {
@@ -840,13 +841,8 @@ type GLTFResult = GLTF & {
 
 export function Lobby(props: JSX.IntrinsicElements['group']) {
     const group = useRef<THREE.Group>(null)
-    const { nodes, materials, animations } = useGLTF('/models/lobby.glb') as GLTFResult
-    const { actions } = useAnimations(animations, group)
+    const { nodes, materials } = useGLTF('/models/lobby.glb') as GLTFResult
     const [scriptBoardHovered, setScriptBoardHovered] = useState(false)
-
-    useEffect(() => {
-        console.log(actions)
-    })
 
     const scriptBoardPointerEnter = () => {
         setScriptBoardHovered(true)
@@ -6825,6 +6821,7 @@ export function Lobby(props: JSX.IntrinsicElements['group']) {
                 <mesh
                     onPointerEnter={scriptBoardPointerEnter}
                     onPointerLeave={scriptBoardPointerLeave}
+                    onClick={() => store.popupOpen = true}
                     name="scriptBoard_interaction_v1"
                     castShadow
                     receiveShadow

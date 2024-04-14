@@ -19,7 +19,11 @@ export default {
         primary:'#f00004',
         secondary:'#5a617b',
         tertiary:'#030f31',
-        online:'#acc225'
+        online:'#acc225',
+        popupText:'#b09899'
+      },
+      spacing: {
+        18: '72px'
       }
     },
   },

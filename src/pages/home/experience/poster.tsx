@@ -3,6 +3,7 @@ import { useGLTF } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 import { PosterProps } from '../../../types/poster'
 import { useEffect, useRef, useState } from 'react'
+import store from '../../../store'
 
 type GLTFResult = GLTF & {
     nodes: {
@@ -46,8 +47,6 @@ export const Poster: React.FC<PosterProps> = ({ data: { material, name, position
     const [hovered, setHovered] = useState(false)
 
     useEffect(() => {
-        console.log(posterRef.current?.material)
-        console.log(materials[material as keyof typeof materials].map)
     }, [hovered]);
 
     return (
@@ -56,6 +55,7 @@ export const Poster: React.FC<PosterProps> = ({ data: { material, name, position
                 ref={posterRef}
                 onPointerOver={() => setHovered(true)}
                 onPointerOut={() => setHovered(false)}
+                onClick={() => store.popupOpen = true}
                 name={name}
                 castShadow
                 receiveShadow
