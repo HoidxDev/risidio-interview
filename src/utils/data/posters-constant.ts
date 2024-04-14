@@ -4,7 +4,7 @@ import * as THREE from 'three'
     {
       name: "backToFuture_interaction_v1",
       material: "backToFuture_interaction_v1",
-      position: new THREE.Vector3(24.654, 5.737, 15.246),
+      position: new THREE.Vector3(24.654, 5.737, 15.25),
       rotation: new THREE.Euler(Math.PI / 2, 0, 0),
       scale:0.29
     },
@@ -100,7 +100,7 @@ import * as THREE from 'three'
     material: "fear & loathing",
     position: new THREE.Vector3(36.172, 9.297, 16.155),
     rotation: new THREE.Euler(Math.PI / 2, 0, 0),
-    scale:1
+    scale:0.29
   },
   {
     name: "kolya_interaction_v1",
@@ -149,6 +149,6 @@ import * as THREE from 'three'
     material: "empire strikes back",
     position: new THREE.Vector3(37.242, 9.345, 27.696),
     rotation: new THREE.Euler(Math.PI / 2, 0, Math.PI / 2),
-    scale:1
+    scale:0.29
   },
 ]
