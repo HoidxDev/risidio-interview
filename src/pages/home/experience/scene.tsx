@@ -1,7 +1,6 @@
 import { Canvas } from '@react-three/fiber'
 import { Lobby } from './lobby'
 import { Environment, OrbitControls } from '@react-three/drei'
-// import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import { Suspense } from 'react';
 import { Bloom, EffectComposer } from '@react-three/postprocessing';
 
