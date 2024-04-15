@@ -4,8 +4,7 @@ import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
-import { useFrame, useLoader } from '@react-three/fiber'
-import { FBXLoader } from 'three/examples/jsm/Addons.js'
+import { useFrame } from '@react-three/fiber'
 
 type GLTFResult = GLTF & {
     nodes: {
@@ -27,9 +26,6 @@ export function Character(props: JSX.IntrinsicElements['group']) {
     const character = useRef<THREE.Group>(null)
     const { nodes, materials, animations } = useGLTF('/models/character.glb') as GLTFResult
     const { actions } = useAnimations(animations, character)
-    const { animations: idleAnimation } = useLoader(FBXLoader, "/models/idle.fbx");
-    const { actions: idleActions } = useAnimations(idleAnimation, character);
-
 
     useFrame(({ camera }) => {
         if (character.current) {
@@ -61,9 +57,8 @@ export function Character(props: JSX.IntrinsicElements['group']) {
 
     useGSAP(() => {
         const walkingAnimation = actions['Armature|mixamo.com|Layer0.001'];
-        const idleAnimation = idleActions['mixamo.com'];
 
-        if (character.current && walkingAnimation && idleAnimation) {
+        if (character.current && walkingAnimation) {
             const tl = gsap.timeline()
 
             tl.call(() => {
