@@ -108,7 +108,7 @@ export function Character(props: JSX.IntrinsicElements['group']) {
 
 
     // Animation and movement logic within the frame loop
-    useFrame((state, delta) => {
+    useFrame((_, delta) => {
         if (character.current) {
             const speed = 2;
 
