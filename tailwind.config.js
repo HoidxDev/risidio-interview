@@ -13,7 +13,8 @@ export default {
         'poppins': 'poppins'
       },
       height:{
-        22: '85px'
+        22: '85px',
+        '81vh': '81vh'
       },
       colors:{
         primary:'#f00004',
@@ -23,7 +24,12 @@ export default {
         popupText:'#b09899'
       },
       spacing: {
-        18: '72px'
+        18: '72px',
+        '20vw': '20vw',
+      },
+      width: {
+        320: '80rem',
+        280: '70rem',
       }
     },
   },

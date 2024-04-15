@@ -13,7 +13,7 @@ export default function UserBar() {
 
     return (
         <div className='absolute z-50 flex items-center justify-center w-full h-20 px-10 lg:px-32 font-poppins bottom-10'>
-            <div className="w-[70rem] h-full bg-white rounded-2.5xl flex items-center">
+            <div className="w-280 h-full bg-white rounded-2.5xl flex items-center">
                 <div className="relative flex items-center justify-center rounded-full right-4 w-28 h-28">
                     <div className="absolute z-50 w-6 h-6 border-4 rounded-full right-2 bottom-1 bg-online border-hite border-3" />
                     <img className="z-40 w-24 rounded-full" src="/assets/profile-picture/user-1.webp" />
