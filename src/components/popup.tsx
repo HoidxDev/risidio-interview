@@ -13,7 +13,7 @@ export default function Popup() {
 
     return (
         <div className={`absolute top-0 -z-10 flex items-start px-5 lg:px-20 pt-8 justify-center w-full h-screen ${popupOpen && '!z-20'}`}>{popupOpen &&
-            <div className='z-50 flex flex-col w-[80rem] items-center justify-between h-[81vh] font-poppins'>
+            <div className='z-50 flex flex-col items-center justify-between w-320 h-81vh font-poppins'>
                 <nav className='w-full h-12 rounded-t-2.5xl bg-red-100 bg-opacity-50 justify-between backdrop-blur-3xl flex items-center'>
                     <h4 className='w-24 ml-5 text-xs font-medium sm:w-32 sm:text-sm sm:ml-11 text-tertiary'> {poster.title} info</h4>
                     <div className='flex flex-col gap-1 cursor-pointer'>

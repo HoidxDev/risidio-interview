@@ -1,7 +1,5 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
-import gsap from 'gsap'
-import { useGSAP } from '@gsap/react'
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { GLTF } from 'three-stdlib'
 import { useFrame } from '@react-three/fiber'
@@ -22,11 +20,24 @@ type GLTFResult = GLTF & {
     }
 }
 
+type MovementKeys = {
+    forward: boolean;
+    backward: boolean;
+    left: boolean;
+    right: boolean;
+    upward: boolean;
+    downward: boolean;
+};
+
 export function Character(props: JSX.IntrinsicElements['group']) {
     const character = useRef<THREE.Group>(null)
     const { nodes, materials, animations } = useGLTF('/models/character.glb') as GLTFResult
     const { actions } = useAnimations(animations, character)
+    const [move, setMove] = useState<MovementKeys>({
+        forward: false, backward: false, left: false, right: false, upward: false, downward: false
+    });
 
+    // Following camera to character
     useFrame(({ camera }) => {
         if (character.current) {
             const position = new THREE.Vector3();
@@ -55,78 +66,77 @@ export function Character(props: JSX.IntrinsicElements['group']) {
         }
     });
 
-    useGSAP(() => {
-        const walkingAnimation = actions['Armature|mixamo.com|Layer0.001'];
-
-        if (character.current && walkingAnimation) {
-            const tl = gsap.timeline()
-
-            tl.call(() => {
-                walkingAnimation.fadeIn(0.5).play();
-                return;
-            }, [], '+=0.5');
-            tl.to(character.current.position, {
-                x: 4.5,
-                z: 8,
-                duration: 5,
-                ease: "none"
-            })
-                .to(character.current.rotation, {
-                    y: -1.2,
-                    duration: 1,
-                    ease: "none"
-                }, "<")
-                .to(character.current.rotation, {
-                    y: 0,
-                    duration: 0.5,
-                    ease: "none"
-                }, "-=0.5")
-                .to(character.current.position, {
-                    z: 7,
-                    duration: 1,
-                    ease: "none"
-                }, "<")
-                .to(character.current.position, {
-                    y: 2.65,
-                    duration: 6,
-                    ease: "none"
-                })
-                .to(character.current.position, {
-                    z: 2,
-                    duration: 7,
-                    ease: "none"
-                }, "<")
-                .to(character.current.rotation, {
-                    y: -1.5,
-                    duration: 0.5,
-                    ease: "none"
-                },)
-                .to(character.current.position, {
-                    x: 7.5,
-                    duration: 2,
-                    ease: "none"
-                }, "<")
-                .to(character.current.rotation, {
-                    y: -3.1,
-                    duration: 0.5,
-                    ease: "none"
-                }, "-=0")
-                .to(character.current.position, {
-                    z: 9.25,
-                    duration: 7.25,
-                    ease: "none"
-                }, "<")
-                .to(character.current.rotation, {
-                    y: -1.5,
-                    duration: 0.5,
-                    ease: "none"
-                }, "-=0")
-            tl.call(() => {
-                walkingAnimation.paused = true;
-                return;
-            }, [], '+=0')
+    // Key handling functions
+    function handleKeyDown(e: KeyboardEvent) {
+        switch (e.key.toLowerCase()) {
+            case 'w': setMove(m => ({ ...m, forward: true })); break;
+            case 's': setMove(m => ({ ...m, backward: true })); break;
+            case 'a': setMove(m => ({ ...m, left: true })); break;
+            case 'd': setMove(m => ({ ...m, right: true })); break;
+            case 'e': setMove(m => ({ ...m, upward: true })); break;
+            case 'r': setMove(m => ({ ...m, downward: true })); break;
         }
-    })
+    }
+
+    function handleKeyUp(e: KeyboardEvent) {
+        switch (e.key.toLowerCase()) {
+            case 'w': setMove(m => ({ ...m, forward: false })); break;
+            case 's': setMove(m => ({ ...m, backward: false })); break;
+            case 'a': setMove(m => ({ ...m, left: false })); break;
+            case 'd': setMove(m => ({ ...m, right: false })); break;
+            case 'e': setMove(m => ({ ...m, upward: false })); break;
+            case 'r': setMove(m => ({ ...m, downward: false })); break;
+
+        }
+    }
+
+    // Function to detect if any movement keys are pressed
+    const isMoving = () => {
+        return move.forward || move.backward || move.left || move.right || move.upward || move.downward;
+    };
+
+    // Setup and cleanup of event listeners
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        window.addEventListener('keyup', handleKeyUp);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keyup', handleKeyUp);
+        };
+    }, []);
+
+
+    // Animation and movement logic within the frame loop
+    useFrame((state, delta) => {
+        if (character.current) {
+            const speed = 2;
+
+            if (move.forward) character.current.translateZ(-delta * speed);
+            if (move.backward) character.current.translateZ(delta * speed);
+            if (move.left) character.current.rotateY(delta * speed);
+            if (move.right) character.current.rotateY(-delta * speed);
+            if (move.upward) {
+                character.current.position.y += delta * speed;
+            }
+            if (move.downward) {
+                character.current.position.y -= delta * speed;
+            }
+
+            if (isMoving()) {
+                // Start or resume the animation with fadeIn and play
+                if (actions['Armature|mixamo.com|Layer0.001'] && !actions['Armature|mixamo.com|Layer0.001'].isRunning()) {
+                    actions['Armature|mixamo.com|Layer0.001'].play();
+                    actions['Armature|mixamo.com|Layer0.001'].paused = false
+                }
+            } else {
+                // Pause the animation when the character is not moving
+                if (actions['Armature|mixamo.com|Layer0.001'] && actions['Armature|mixamo.com|Layer0.001'].isRunning()) {
+                    actions['Armature|mixamo.com|Layer0.001'].paused = true;
+                }
+            }
+        }
+    });
 
     return (
         <group scale={0.8} position={[0, -1.12, 10]} ref={character} {...props} dispose={null}>

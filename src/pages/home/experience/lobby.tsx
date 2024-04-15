@@ -6845,11 +6845,11 @@ export function Lobby(props: JSX.IntrinsicElements['group']) {
                 </mesh>
             </group>
             {postersBottom.map((poster) => (
-                <Poster data={poster} />
+                <Poster key={poster.id} data={poster} />
             ))}
 
             {postersTop.map((poster) => (
-                <Poster data={poster} />
+                <Poster key={poster.id} data={poster} />
             ))}
         </group>
     )
